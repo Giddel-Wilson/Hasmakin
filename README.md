@@ -1,278 +1,814 @@
-# University of Port Harcourt Hostel Allocation System
+# University of Port Harcourt Hostel Allocation System (HASmakin)
 
 A modern, automated hostel allocation system built for the University of Port Harcourt, designed to improve fairness, transparency, and efficiency in student accommodation management.
 
+---
+
+## 📋 Table of Contents
+
+- [Project Overview](#-project-overview)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [System Architecture](#-system-architecture)
+- [Getting Started](#-getting-started)
+- [Database Setup](#-database-setup)
+- [Environment Variables](#-environment-variables)
+- [Deployment](#-deployment)
+- [User Guide](#-user-guide)
+- [Admin Guide](#-admin-guide)
+- [Development Methodology](#-development-methodology)
+- [Security](#-security)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+---
+
 ## 🎯 Project Overview
 
-**Project Title:** Hostel Allocation System  
-**Student:** Ademakin Angel Oluwapelumi (U2021/5570062)  
-**Institution:** Department of Computer Science, Faculty of Computing, University of Port Harcourt  
-**Submission:** August 2025  
+**Project Title:** Hostel Allocation System (HASmakin)  
+**Developer:** Giddel Wilson  
+**Institution:** University of Port Harcourt  
+**Department:** Computer Science  
 
-This final-year project automates the hostel allocation process, replacing manual queues with a fair, transparent, and efficient digital system that includes predictive analytics for demand forecasting.
+This system automates the hostel allocation process, replacing manual queues with a fair, transparent, and efficient digital system. It provides a complete end-to-end solution for managing student accommodation applications, payments, and room assignments.
+
+### Problem Statement
+
+Traditional hostel allocation at universities faces several challenges:
+- Long physical queues and manual processing
+- Lack of transparency in allocation decisions
+- Difficulty in managing multiple hostel preferences
+- Manual payment verification and tracking
+- No centralized system for tracking application status
+- Administrative overhead in managing allocations
+
+### Solution
+
+HASmakin provides:
+- **Digital Application System**: Students apply online with preference ranking
+- **Automated Allocation**: Fair algorithm assigns rooms based on multiple criteria
+- **Payment Integration**: Secure payment processing and verification
+- **Real-time Tracking**: Students can monitor application status
+- **Admin Dashboard**: Comprehensive management tools for administrators
+- **Data Analytics**: Statistics and reporting for decision-making
+
+---
+
+## ✨ Features
+
+### Student Features
+
+#### Authentication & Profile Management
+- User registration with university matriculation number
+- Secure login with JWT authentication
+- Profile management with personal and guardian information
+- Academic level tracking (Year 1-5)
+
+#### Application System
+- Multi-step application form
+- Hostel preference ranking (up to 3 choices)
+- Special accommodation needs tracking
+- Medical conditions documentation
+- Roommate preference system
+- Application status tracking
+
+#### Payment System
+- Secure payment processing
+- Multiple payment methods supported
+- Payment verification
+- Payment history and receipts
+- Refund tracking
+
+#### Allocation Management
+- Room assignment notifications
+- Allocation details (hostel, room number, bed number)
+- Allocation confirmation
+- Allocation history
+
+### Admin Features
+
+#### Dashboard Overview
+- Real-time statistics
+  - Total applications (pending, approved, rejected)
+  - Bed availability and occupancy rates
+  - Payment status overview
+- Recent applications feed
+- Quick action buttons
+
+#### Application Management
+- View all applications with filtering
+  - By status (pending, approved, rejected)
+  - By academic level
+  - By gender
+  - By hostel preference
+- Search by student name or matric number
+- Bulk operations support
+- Application approval/rejection with reasons
+- Special needs flagging
+
+#### Hostel Management
+- Add/edit/delete hostels
+- Manage hostel details
+  - Name and location
+  - Gender (Male, Female, Mixed)
+  - Total capacity
+  - Available beds
+- Room management
+  - Room numbers and capacities
+  - Bed assignments
+- Hostel activation/deactivation
+
+#### Allocation System
+- Automated allocation algorithm
+  - Considers student preferences
+  - Respects gender restrictions
+  - Handles special needs
+  - Processes roommate requests
+- Manual allocation overrides
+- Allocation confirmation tracking
+- Deallocation and reallocation
+- Export allocation reports (CSV)
+
+#### Payment Management
+- View all payments with filtering
+  - By status (pending, completed, failed, refunded)
+  - By date range
+  - By payment method
+- Payment confirmation
+- Payment rejection with reasons
+- Refund processing
+- Financial reporting
+  - Period-based reports (today, week, month, all time)
+  - Payment method breakdown
+  - Hostel-based revenue analysis
+  - PDF export functionality
+
+#### User Management
+- View all registered users
+- Filter by role (student, admin)
+- User account management
+- Admission year bulk updates
+
+#### System Settings
+- Application deadline configuration
+- Payment deadline configuration
+- System-wide announcements
+- Email configuration
+- Payment gateway settings
+
+---
 
 ## 🛠 Tech Stack
 
 ### Frontend
-- **SvelteKit** - Modern web framework for the user interface
-- **Shadcn UI** - Component library for consistent design
-- **Tailwind CSS** - Responsive styling and university branding
-- **TypeScript** - Type-safe development
+- **SvelteKit 2.x** - Full-stack web framework
+- **Tailwind CSS 3.x** - Utility-first CSS framework
+- **TypeScript 5.x** - Type-safe development
+- **Svelte 5** - Reactive UI components
 
 ### Backend
-- **SvelteKit API Routes** - Server-side API endpoints
-- **Prisma ORM** - Database modeling and queries
-- **JWT** - Secure authentication and authorization
+- **SvelteKit API Routes** - Server-side endpoints
+- **Prisma ORM 6.x** - Database ORM with type safety
+- **JWT (jsonwebtoken)** - Authentication tokens
+- **bcrypt** - Password hashing
 
 ### Database
-- **Neon PostgreSQL** - Scalable serverless database
-- **Comprehensive schema** - Users, applications, hostels, rooms, allocations, payments
+- **MongoDB** - NoSQL database
+- Hosted on MongoDB Atlas
 
 ### Payment Integration
-- **Paystack API** - Secure payment verification system
+- **Paystack API** - Nigerian payment gateway
+- Webhook support for real-time updates
 
-### Machine Learning
-- **Brain.js** - Lightweight ML for hostel demand forecasting
+### Development Tools
+- **Bun** - Fast JavaScript runtime and package manager
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **Playwright** - End-to-end testing
 
-### Hosting
-- **Vercel** - Deployment platform for both frontend and backend
-
-## 🏗 System Architecture
-
-### User Roles
-
-#### Students
-- Register/login with university credentials
-- Submit hostel applications with preferences
-- Make secure payments via Paystack
-- Track application status in real-time
-- Confirm room allocations
-
-#### Administrators
-- Secure dashboard access (admin-only creation)
-- Manage hostel and room inventory
-- Configure allocation criteria
-- Run automated allocation engine
-- Generate reports and analytics
-- Manage user accounts and applications
-
-## 📊 Database Schema
-
-The system uses a comprehensive PostgreSQL schema with the following key models:
-
-- **Users** - Student and admin account management
-- **Applications** - Hostel application submissions
-- **Hostels** - Accommodation facility information
-- **Rooms** - Individual room management
-- **Allocations** - Room assignment tracking
-- **Payments** - Paystack payment records
-- **AuditLogs** - System activity monitoring
-- **HistoricalData** - ML training data
-
-## 🔐 Authentication & Security
-
-- **JWT-based authentication** with role separation
-- **Password hashing** using bcryptjs with salt rounds
-- **Rate limiting** for API endpoints
-- **Input validation** and sanitization
-- **University email verification** for student registration
-- **Audit logging** for all system activities
-
-## 🎨 UI/UX Design
-
-### Design System
-- **University Colors:** Navy Blue (#1E298A), Gold (#FACC15), Emerald (#10B981)
-- **Typography:** Poppins for headings, Inter for body text
-- **Mobile-first responsive design**
-- **Accessibility considerations**
-
-### Student Interface
-- Clean, intuitive dashboard
-- Step-by-step application process
-- Real-time status updates
-- Payment integration
-
-### Admin Interface
-- Comprehensive management dashboard
-- Data visualization and reporting
-- Allocation management tools
-- User administration
-
-## 🚀 Key Features
-
-### Core Functionality
-- ✅ **User Registration & Authentication**
-- ✅ **Role-based Access Control**
-- ✅ **Student Dashboard**
-- ✅ **University Branding & Design**
-- 🚧 **Hostel Application System**
-- 🚧 **Paystack Payment Integration**
-- 🚧 **Automated Allocation Engine**
-- 🚧 **Admin Dashboard**
-- 🚧 **Predictive Analytics**
-
-### Advanced Features
-- Real-time notifications
-- Allocation algorithm based on:
-  - Academic level priority
-  - Payment verification
-  - Gender-specific hostels
-  - Special needs accommodation
-- Historical data analysis
-- Demand forecasting using Brain.js
-- Comprehensive reporting system
-
-## 📁 Project Structure
-
-```
-src/
-├── lib/
-│   ├── components/ui/          # Shadcn UI components
-│   └── server/
-│       ├── auth.ts            # Authentication utilities
-│       └── database.ts        # Database configuration
-├── routes/
-│   ├── auth/                  # Authentication pages
-│   ├── dashboard/             # Student dashboard
-│   ├── admin/                 # Admin interface
-│   └── api/                   # API endpoints
-│       ├── auth/              # Authentication APIs
-│       └── student/           # Student APIs
-└── app.css                    # University styling
-
-prisma/
-└── schema.prisma              # Database schema
-
-.env                           # Environment variables
-```
-
-## 🔧 Installation & Setup
-
-### Prerequisites
-- Node.js 18+ or Bun
-- PostgreSQL database (Neon recommended)
-- Paystack account for payments
-
-### Development Setup
-
-1. **Clone and Install**
-   ```bash
-   git clone <repository-url>
-   cd HASmakin
-   bun install
-   ```
-
-2. **Environment Configuration**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-3. **Database Setup**
-   ```bash
-   bunx prisma generate
-   bunx prisma migrate dev
-   ```
-
-4. **Start Development Server**
-   ```bash
-   bun dev
-   ```
-
-### Production Deployment
-
-1. **Database Migration**
-   ```bash
-   bunx prisma migrate deploy
-   ```
-
-2. **Build Application**
-   ```bash
-   bun run build
-   ```
-
-3. **Deploy to Vercel**
-   ```bash
-   vercel deploy
-   ```
-
-## 🔐 Environment Variables
-
-```env
-DATABASE_URL="postgresql://..."
-JWT_SECRET="your-jwt-secret"
-JWT_REFRESH_SECRET="your-refresh-secret"
-PAYSTACK_SECRET_KEY="sk_test_..."
-PAYSTACK_PUBLIC_KEY="pk_test_..."
-NODE_ENV="development"
-PORT=3001
-FRONTEND_URL="http://localhost:5173"
-```
-
-## 🧪 Testing
-
-### Unit Tests
-```bash
-bun test
-```
-
-### E2E Tests
-```bash
-bun run test:e2e
-```
-
-## 📈 Current Progress
-
-- ✅ **Database Schema & Models** (100%)
-- ✅ **Authentication System** (100%)
-- ✅ **Landing Page** (100%)
-- ✅ **Student Registration/Login** (100%)
-- ✅ **Student Dashboard Layout** (100%)
-- 🚧 **API Endpoints** (60%)
-- 🚧 **Admin Interface** (0%)
-- 🚧 **Payment Integration** (0%)
-- 🚧 **Allocation Engine** (0%)
-- 🚧 **Predictive Analytics** (0%)
-
-## 🔜 Next Steps
-
-1. **Complete Student Application Flow**
-   - Hostel application form
-   - Payment integration
-   - Status tracking
-
-2. **Build Admin Interface**
-   - Dashboard with analytics
-   - User management
-   - Allocation controls
-
-3. **Implement Core Algorithms**
-   - Automated allocation engine
-   - Predictive analytics with Brain.js
-
-4. **Testing & Optimization**
-   - End-to-end testing
-   - Performance optimization
-   - Security audit
-
-5. **Documentation & Deployment**
-   - Complete documentation
-   - Production deployment
-   - User training materials
-
-## 📄 Academic Documentation
-
-- **README.md** - Project overview and setup
-- **METHODOLOGY.md** - Development methodology and design decisions
-- **REPORT.md** - Academic project report structure
-
-## 👨‍💻 Developer
-
-**Ademakin Angel Oluwapelumi**  
-Matric No: U2021/5570062  
-Department of Computer Science  
-University of Port Harcourt  
+### Hosting & Deployment
+- **Vercel** - Frontend and API hosting
+- **MongoDB Atlas** - Database hosting
+- **GitHub** - Version control
 
 ---
 
-*This project represents a comprehensive solution to modernize hostel allocation at the University of Port Harcourt, demonstrating the practical application of modern web technologies in solving real-world university administration challenges.*
+## 🏗 System Architecture
+
+### Database Schema
+
+#### Core Models
+
+**User**
+- Authentication (matricNo, email, password)
+- Personal info (name, phone, address)
+- Academic info (level, admissionYear)
+- Guardian info (name, phone, address)
+- Demographic info (nationality, state, religion, dateOfBirth, gender)
+- Role (STUDENT, ADMIN)
+
+**Application**
+- User reference
+- Academic level and gender
+- Hostel preferences (array of hostel IDs)
+- Special needs and medical conditions
+- Roommate request
+- Application status (PENDING, APPROVED, REJECTED)
+- Timestamps
+
+**Hostel**
+- Name and location
+- Gender restriction (MALE, FEMALE, MIXED)
+- Total beds and available beds
+- Active status
+- Rooms (one-to-many)
+
+**Room**
+- Hostel reference
+- Room number and capacity
+- Occupied count
+- Allocations (one-to-many)
+
+**Allocation**
+- User, application, and room references
+- Status (PENDING, ALLOCATED, CONFIRMED)
+- Timestamps (allocated, confirmed, expires)
+
+**Payment**
+- User and application references
+- Amount and payment method
+- Paystack reference
+- Transaction ID
+- Status (PENDING, COMPLETED, FAILED, REFUNDED)
+- Activity log
+- Timestamps
+
+**SystemSettings**
+- Application deadlines (start, end)
+- Payment deadlines (start, end)
+- Notification settings
+- Payment gateway configuration
+
+### Authentication Flow
+
+1. **Registration**
+   - Student submits registration form
+   - Password is hashed with bcrypt
+   - User account created with STUDENT role
+   - Welcome email sent (optional)
+
+2. **Login**
+   - User submits credentials
+   - Password verified with bcrypt
+   - JWT access token generated (30 min expiry)
+   - JWT refresh token generated (7 day expiry)
+   - Tokens stored in HTTP-only cookies
+
+3. **Authorization**
+   - Middleware extracts JWT from cookie or header
+   - Token verified and user data attached to request
+   - Role-based access control enforced
+   - Protected routes check for authentication
+
+4. **Token Refresh**
+   - Client sends refresh token
+   - New access token generated
+   - Refresh token rotated for security
+
+### Allocation Algorithm
+
+The allocation system uses a priority-based algorithm:
+
+1. **Eligibility Check**
+   - Application status: APPROVED
+   - Payment status: COMPLETED
+   - No existing allocation
+
+2. **Preference Matching**
+   - Iterate through student preferences (1st, 2nd, 3rd choice)
+   - Check hostel availability
+   - Verify gender restrictions
+   - Check room capacity
+
+3. **Special Considerations**
+   - Special needs flagged for admin review
+   - Roommate requests processed together
+   - Medical conditions documented
+
+4. **Assignment**
+   - Allocate to first available preferred hostel
+   - Assign specific room and bed
+   - Create allocation record
+   - Update room occupancy
+   - Send notification to student
+
+5. **Fallback**
+   - If no preferences available, no allocation made
+   - Student notified to update preferences or apply for next cycle
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Bun** >= 1.0.0 (or Node.js >= 18.0.0)
+- **MongoDB** (local or Atlas)
+- **Git**
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Giddel-Wilson/Hasmakin.git
+   cd Hasmakin
+   ```
+
+2. **Install dependencies**
+   ```bash
+   bun install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env` with your configuration (see [Environment Variables](#-environment-variables))
+
+4. **Set up the database**
+   ```bash
+   # Generate Prisma Client
+   bunx prisma generate
+
+   # Run migrations
+   bunx prisma db push
+
+   # Seed the database (optional)
+   bun run db:seed
+   ```
+
+5. **Create an admin account**
+   ```bash
+   bun run db:create-admin
+   ```
+
+6. **Start the development server**
+   ```bash
+   bun run dev
+   ```
+
+7. **Open your browser**
+   ```
+   http://localhost:5173
+   ```
+
+### Build for Production
+
+```bash
+bun run build
+bun run preview
+```
+
+---
+
+## 💾 Database Setup
+
+### MongoDB Atlas Setup
+
+1. Create account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a new cluster
+3. Set up database user with password
+4. Whitelist your IP address (or use 0.0.0.0/0 for development)
+5. Get your connection string
+6. Add to `.env` as `DATABASE_URL`
+
+### Prisma Schema
+
+The database schema is defined in `prisma/schema.prisma`. Key models:
+
+- **Users**: Student and admin accounts
+- **Applications**: Hostel applications with preferences
+- **Hostels**: Hostel buildings and details
+- **Rooms**: Individual rooms within hostels
+- **Allocations**: Room assignments to students
+- **Payments**: Payment records and transactions
+- **SystemSettings**: Application-wide configuration
+
+### Database Commands
+
+```bash
+# Generate Prisma Client
+bunx prisma generate
+
+# Push schema changes to database
+bunx prisma db push
+
+# Open Prisma Studio (Database GUI)
+bunx prisma studio
+
+# Reset database (WARNING: Deletes all data)
+bunx prisma migrate reset
+
+# Seed database with sample data
+bun run db:seed
+```
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+# Database
+DATABASE_URL="mongodb+srv://username:password@cluster.mongodb.net/hasmakin?retryWrites=true&w=majority"
+
+# JWT Secrets (Generate with: openssl rand -base64 32)
+JWT_SECRET="your-super-secret-jwt-key-here"
+JWT_REFRESH_SECRET="your-super-secret-refresh-key-here"
+
+# Paystack (Get from https://dashboard.paystack.com/#/settings/developer)
+PAYSTACK_SECRET_KEY="sk_test_your_secret_key_here"
+PAYSTACK_PUBLIC_KEY="pk_test_your_public_key_here"
+
+# Email (Optional - for notifications)
+SMTP_HOST="smtp.gmail.com"
+SMTP_PORT="587"
+SMTP_USER="your-email@gmail.com"
+SMTP_PASS="your-app-password"
+SMTP_FROM="noreply@uniport.edu.ng"
+
+# Application
+PUBLIC_APP_URL="http://localhost:5173"
+NODE_ENV="development"
+```
+
+### Security Notes
+
+- Never commit `.env` file to version control
+- Use strong, randomly generated secrets for JWT
+- Rotate secrets periodically in production
+- Use different secrets for development and production
+- Store production secrets in Vercel environment variables
+
+---
+
+## 🌐 Deployment
+
+### Vercel Deployment
+
+1. **Install Vercel CLI**
+   ```bash
+   npm i -g vercel
+   ```
+
+2. **Login to Vercel**
+   ```bash
+   vercel login
+   ```
+
+3. **Deploy**
+   ```bash
+   vercel
+   ```
+
+4. **Set Environment Variables**
+   - Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+   - Add all variables from `.env`
+   - Click "Save"
+
+5. **Redeploy**
+   ```bash
+   vercel --prod
+   ```
+
+### Environment Variables in Vercel
+
+Add these in the Vercel dashboard:
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `JWT_REFRESH_SECRET`
+- `PAYSTACK_SECRET_KEY`
+- `PAYSTACK_PUBLIC_KEY`
+- `PUBLIC_APP_URL` (your vercel URL)
+- `NODE_ENV=production`
+
+### MongoDB Atlas Production Setup
+
+1. Create production cluster
+2. Enable backup
+3. Set up proper access controls
+4. Use connection string pooling
+5. Monitor performance
+
+---
+
+## 📖 User Guide
+
+### For Students
+
+#### Registration
+1. Go to `/auth/register`
+2. Fill in your details:
+   - Full name
+   - Matriculation number (e.g., U2021/5570004)
+   - Email address
+   - Password (min 8 characters)
+3. Click "Register"
+4. Login with your credentials
+
+#### Applying for Hostel
+1. Login to your dashboard
+2. Click "Apply for Hostel"
+3. Fill in the application form:
+   - Academic level
+   - Gender
+   - Select 3 hostel preferences (in order of preference)
+   - Special accommodation needs (optional)
+   - Medical conditions (optional)
+   - Roommate request (optional - enter matric number)
+4. Review and submit
+
+#### Making Payment
+1. Go to "Payments" section
+2. View payment details
+3. Click "Make Payment"
+4. Complete payment via Paystack
+5. Payment will be verified automatically
+
+#### Checking Status
+1. Go to "Status" page
+2. View your application status:
+   - **Pending**: Under review
+   - **Approved**: Approved, awaiting payment
+   - **Rejected**: Not approved (with reason)
+3. View payment status
+4. View allocation details (if allocated)
+
+---
+
+## 👨‍💼 Admin Guide
+
+### Admin Access
+
+**Default Credentials:**
+- Matric No: `ADMIN001`
+- Password: `AdminPassword123!`
+
+**Change password immediately after first login!**
+
+### Managing Applications
+
+1. Go to `/admin/applications`
+2. Use filters to find applications:
+   - By status
+   - By academic level
+   - By hostel preference
+   - Search by name/matric number
+3. Review application details including special needs
+4. Approve or reject applications
+5. Export data as CSV
+
+### Managing Payments
+
+1. Go to `/admin/payments`
+2. View all payments with status
+3. Filter by:
+   - Status (pending, completed, failed, refunded)
+   - Date range
+   - Search by student name/reference
+4. Actions:
+   - Confirm payment
+   - Reject payment (with reason)
+   - Process refund
+5. Generate financial reports:
+   - Select period (today, week, month, all time)
+   - View statistics
+   - Export as PDF
+
+### Running Allocations
+
+1. Go to `/admin/allocations`
+2. View statistics:
+   - Total applications
+   - Pending allocation
+   - Already allocated
+   - Available beds
+3. Click "Run Allocation"
+4. System will:
+   - Process all approved applications with completed payments
+   - Assign rooms based on preferences
+   - Skip students with existing allocations
+5. View allocation results
+6. Export allocations as CSV
+
+### Managing Hostels
+
+1. Go to `/admin/hostels`
+2. View all hostels with capacity
+3. Add new hostel:
+   - Name
+   - Location description
+   - Gender (Male, Female, Mixed)
+   - Total beds
+4. Edit hostel details
+5. Activate/deactivate hostels
+6. Manage rooms within each hostel
+
+### System Settings
+
+1. Go to `/admin/settings`
+2. Configure:
+   - Application deadlines (start and end dates)
+   - Payment deadlines
+   - Email notifications
+   - Payment gateway settings
+3. Test integrations:
+   - Send test email
+   - Test payment gateway
+
+---
+
+## 💻 Development Methodology
+
+### Agile Approach
+
+This project follows an Agile development methodology with iterative cycles:
+
+1. **Sprint Planning**: Define features for 2-week sprints
+2. **Development**: Build features with continuous integration
+3. **Testing**: Test each feature before merging
+4. **Review**: Demo to stakeholders
+5. **Retrospective**: Improve process
+
+### Development Phases
+
+#### Phase 1: Foundation ✅
+- Database schema design
+- Authentication system
+- Basic UI framework
+- Project structure
+
+#### Phase 2: Core Features ✅
+- Student application workflow
+- Payment integration
+- Admin management interface
+- Allocation algorithm
+
+#### Phase 3: Enhancement ✅
+- Advanced filtering and search
+- Financial reporting
+- Special needs tracking
+- Real-time updates
+
+#### Phase 4: Production 🚀
+- Security hardening
+- Performance optimization
+- Production deployment
+- User training
+
+### Code Quality Standards
+
+- **TypeScript**: Strict type checking enabled
+- **ESLint**: Code linting for consistency
+- **Prettier**: Auto-formatting on save
+- **Git Hooks**: Pre-commit checks
+- **Code Reviews**: All changes reviewed before merge
+- **Documentation**: Inline comments and README updates
+
+---
+
+## 🔒 Security
+
+### Authentication & Authorization
+
+- **Password Security**: Bcrypt with salt rounds (10)
+- **JWT Tokens**: Signed with HS256 algorithm
+- **Token Expiry**: Access (30 min), Refresh (7 days)
+- **HTTP-Only Cookies**: Prevents XSS attacks
+- **Role-Based Access**: STUDENT and ADMIN roles
+- **Protected Routes**: Middleware authentication checks
+
+### Data Protection
+
+- **Input Validation**: All user inputs validated
+- **SQL Injection**: Prisma ORM prevents injection
+- **XSS Protection**: Output encoding and sanitization
+- **CSRF Protection**: SvelteKit built-in CSRF tokens
+- **Secure Headers**: Security headers configured
+- **HTTPS Only**: Production uses SSL/TLS
+
+### Payment Security
+
+- **PCI Compliance**: Paystack handles card data
+- **No Card Storage**: Never store card details
+- **Webhook Verification**: Paystack signature validation
+- **Transaction Logging**: All payments logged
+- **Refund Controls**: Admin-only refund processing
+
+### Best Practices
+
+1. **Never commit secrets** to version control
+2. **Use environment variables** for configuration
+3. **Rotate secrets** periodically
+4. **Monitor logs** for suspicious activity
+5. **Keep dependencies updated** with `bun update`
+6. **Enable 2FA** for admin accounts (future feature)
+7. **Regular backups** of database
+8. **Security audits** before major releases
+
+---
+
+## 🤝 Contributing
+
+### Getting Started
+
+1. Fork the repository
+2. Create a feature branch
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. Make your changes
+4. Test thoroughly
+5. Commit with descriptive message
+   ```bash
+   git commit -m "feat: add new feature description"
+   ```
+6. Push to your fork
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+7. Create a Pull Request
+
+### Commit Message Convention
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation changes
+- `style:` Code style changes (formatting)
+- `refactor:` Code refactoring
+- `test:` Test additions or changes
+- `chore:` Build process or auxiliary tool changes
+
+### Code Style
+
+- Use TypeScript for all new code
+- Follow ESLint rules
+- Use Prettier for formatting
+- Write meaningful variable names
+- Add comments for complex logic
+- Keep functions small and focused
+
+---
+
+## 📞 Support
+
+### Issues & Bugs
+
+Report issues on [GitHub Issues](https://github.com/Giddel-Wilson/Hasmakin/issues)
+
+### Contact
+
+- **Developer**: Giddel Wilson
+- **Institution**: University of Port Harcourt
+- **Repository**: https://github.com/Giddel-Wilson/Hasmakin
+
+---
+
+## 📄 License
+
+This project is developed as a final year project for the University of Port Harcourt.  
+All rights reserved © 2025
+
+---
+
+## 🙏 Acknowledgments
+
+- **University of Port Harcourt** - For project support
+- **Department of Computer Science** - For guidance and resources
+- **SvelteKit Team** - For excellent documentation
+- **Prisma Team** - For powerful ORM tools
+- **Paystack** - For payment integration support
+
+---
+
+## 🗺 Roadmap
+
+### Future Enhancements
+
+- [ ] Mobile application (React Native)
+- [ ] Email notifications for status changes
+- [ ] SMS notifications via Twilio
+- [ ] Advanced analytics dashboard
+- [ ] Machine learning for allocation optimization
+- [ ] Student feedback system
+- [ ] Maintenance request system
+- [ ] Visitor management
+- [ ] QR code room access
+- [ ] Integration with university portal
+
+---
+
+**Built with ❤️ for University of Port Harcourt**
