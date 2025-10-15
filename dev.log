@@ -1,9 +1,0 @@
-$ vite dev --port "5173"
-Port 5173 is in use, trying another one...
-
-  VITE v7.1.4  ready in 2187 ms
-
-  ➜  Local:   http://localhost:5174/
-  ➜  Network: use --host to expose
-  ➜  press h + enter to show help
-error: script "dev" was terminated by signal SIGHUP (Terminal hung up)
