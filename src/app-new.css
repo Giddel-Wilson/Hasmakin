@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* University of Port Harcourt Hostel Allocation System */
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* University Color Palette */
+  --uniport-navy: #1E298A;
+  --uniport-gold: #FACC15;
+  --uniport-emerald: #10B981;
+  --uniport-gray: #F3F4F6;
+  
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.29 0.142 253.67);
+  --primary-foreground: oklch(0.971 0.014 253.67);
+  --secondary: oklch(0.87 0.136 86.45);
+  --secondary-foreground: oklch(0.145 0 0);
+  --muted: oklch(0.966 0.006 258.15);
+  --muted-foreground: oklch(0.542 0.022 257.5);
+  --accent: oklch(0.678 0.181 162.48);
+  --accent-foreground: oklch(0.145 0 0);
+  --destructive: oklch(0.628 0.258 29.23);
+  --destructive-foreground: oklch(0.971 0.014 253.67);
+  --border: oklch(0.905 0.022 257.5);
+  --input: oklch(0.905 0.022 257.5);
+  --ring: oklch(0.29 0.142 253.67);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.87 0.136 86.45);
+  --primary-foreground: oklch(0.145 0 0);
+  --secondary: oklch(0.29 0.142 253.67);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.678 0.181 162.48);
+  --accent-foreground: oklch(0.145 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.87 0.136 86.45);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/* University Theme Customizations */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+}
+
+/* Custom utility classes for University branding */
+.uniport-gradient {
+  background: linear-gradient(135deg, #1E298A 0%, #1D4ED8 50%, #1E298A 100%);
+}
+
+.uniport-text-gradient {
+  background: linear-gradient(135deg, #1E298A 0%, #FACC15 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.status-pending {
+  @apply bg-yellow-50 text-yellow-700 border border-yellow-200;
+}
+
+.status-approved {
+  @apply bg-green-50 text-green-700 border border-green-200;
+}
+
+.status-allocated {
+  @apply bg-blue-50 text-blue-700 border border-blue-200;
+}
+
+.status-rejected {
+  @apply bg-red-50 text-red-700 border border-red-200;
+}
+
+.status-confirmed {
+  @apply bg-emerald-50 text-emerald-700 border border-emerald-200;
+}

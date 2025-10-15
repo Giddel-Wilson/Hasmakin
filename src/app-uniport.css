@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* University of Port Harcourt Hostel Allocation System Styles */
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* University Color Palette */
+  --uniport-navy: 30 41 138; /* #1E298A */
+  --uniport-gold: 250 204 21; /* #FACC15 */
+  --uniport-emerald: 16 185 129; /* #10B981 */
+  --uniport-gray: 243 244 246; /* #F3F4F6 */
+  
+  /* Base colors */
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.29 0.142 253.67); /* Navy Blue */
+  --primary-foreground: oklch(0.971 0.014 253.67);
+  --secondary: oklch(0.87 0.136 86.45); /* Gold */
+  --secondary-foreground: oklch(0.145 0 0);
+  --muted: oklch(0.966 0.006 258.15);
+  --muted-foreground: oklch(0.542 0.022 257.5);
+  --accent: oklch(0.678 0.181 162.48); /* Emerald */
+  --accent-foreground: oklch(0.145 0 0);
+  --destructive: oklch(0.628 0.258 29.23);
+  --destructive-foreground: oklch(0.971 0.014 253.67);
+  --border: oklch(0.905 0.022 257.5);
+  --input: oklch(0.905 0.022 257.5);
+  --ring: oklch(0.29 0.142 253.67); /* Navy Blue */
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  @apply bg-background text-foreground;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  @apply font-semibold;
+}
+
+/* Custom Components */
+.uniport-gradient {
+  @apply bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900;
+}
+
+.uniport-card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+}
+
+.uniport-button-primary {
+  @apply bg-blue-900 hover:bg-blue-800 text-white font-medium px-4 py-2 rounded-lg transition-colors duration-200;
+}
+
+.uniport-button-secondary {
+  @apply bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-medium px-4 py-2 rounded-lg transition-colors duration-200;
+}
+
+.uniport-input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-all duration-200;
+}
+
+.status-badge {
+  @apply px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.status-pending {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-approved {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-allocated {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-rejected {
+  @apply bg-red-100 text-red-800;
+}
+
+.status-confirmed {
+  @apply bg-emerald-100 text-emerald-800;
+}

@@ -1,0 +1,244 @@
+// Hostel Allocation System Database Schema
+// University of Port Harcourt - Computer Science Department
+// By: Ademakin Angel Oluwapelumi (U2021/5570062)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  MIXED
+}
+
+enum Level {
+  YEAR_1
+  YEAR_2
+  YEAR_3
+  YEAR_4
+  YEAR_5
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ALLOCATED
+  CONFIRMED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum AllocationStatus {
+  PENDING
+  ALLOCATED
+  CONFIRMED
+  REJECTED
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+  BANNED
+}
+
+model User {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String        @unique
+  matricNo      String        @unique @map("matric_no")
+  passwordHash  String        @map("password_hash")
+  role          UserRole      @default(STUDENT)
+  accountStatus AccountStatus @default(ACTIVE)
+  admissionYear Int?          @map("admission_year") // Year student was admitted (e.g. 2020, 2021, etc.)
+  
+  // Additional student information
+  department    String?       // Department (e.g., Computer Science, Mathematics)
+  faculty       String?       // Faculty (e.g., Science, Engineering, Arts)
+  gender        Gender?       // Student's gender (for hostel allocation)
+  religion      String?       // Student's religion
+  nationality   String?       // Student's nationality/country
+  stateOfOrigin String?       @map("state_of_origin") // State/Province of origin
+  dateOfBirth   DateTime?     @map("date_of_birth") // Date of birth
+  phoneNumber   String?       @map("phone_number") // Student's phone number
+  guardianPhone1 String?      @map("guardian_phone_1") // Primary guardian/parent phone number
+  guardianRelationship1 String? @map("guardian_relationship_1") // Relationship to guardian 1
+  guardianPhone2 String?      @map("guardian_phone_2") // Secondary guardian/parent phone number
+  guardianRelationship2 String? @map("guardian_relationship_2") // Relationship to guardian 2
+  
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  applications Application[]
+  payments     Payment[]
+  allocations  Allocation[]
+  
+  // Admin relations
+  adminProfile AdminProfile?
+  createdAdmins AdminProfile[] @relation("AdminCreator")
+
+  @@map("users")
+}
+
+model AdminProfile {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @unique @map("user_id") @db.ObjectId
+  createdBy String   @map("created_by") @db.ObjectId
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creator User @relation("AdminCreator", fields: [createdBy], references: [id])
+
+  @@map("admin_profiles")
+}
+
+model Application {
+  id                    String            @id @default(auto()) @map("_id") @db.ObjectId
+  userId                String            @map("user_id") @db.ObjectId
+  gender                Gender
+  level                 Level
+  preferences           String[]          // Array of hostel preferences
+  specialNeeds          String?           @map("special_needs")
+  medicalConditions     String?           @map("medical_conditions")
+  requestedRoommateId   String?           @map("requested_roommate_id") @db.ObjectId
+  paymentStatus         PaymentStatus     @default(PENDING) @map("payment_status")
+  applicationStatus     ApplicationStatus @default(PENDING) @map("application_status")
+  submittedAt           DateTime          @default(now()) @map("submitted_at")
+  updatedAt             DateTime          @updatedAt @map("updated_at")
+
+  // Relations
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payments          Payment[]
+  allocations       Allocation[]
+
+  @@map("applications")
+}
+
+model Hostel {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  name                String   @unique
+  gender              Gender
+  capacity            Int
+  available           Int
+  location            String?
+  locationDescription String?  @map("location_description") // Detailed location info
+  amenities           String[] // Array of amenities
+  isActive            Boolean  @default(false) @map("is_active") // Whether hostel is active/available for applications
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  rooms Room[]
+
+  @@map("hostels")
+}
+
+model Room {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  hostelId String @map("hostel_id") @db.ObjectId
+  number   String
+  capacity Int
+  occupied Int    @default(0)
+
+  // Relations
+  hostel      Hostel       @relation(fields: [hostelId], references: [id], onDelete: Cascade)
+  allocations Allocation[]
+
+  @@unique([hostelId, number])
+  @@map("rooms")
+}
+
+model Allocation {
+  id            String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String           @map("user_id") @db.ObjectId
+  applicationId String           @map("application_id") @db.ObjectId
+  roomId        String           @map("room_id") @db.ObjectId
+  status        AllocationStatus @default(PENDING)
+  allocatedAt   DateTime         @default(now()) @map("allocated_at")
+  confirmedAt   DateTime?        @map("confirmed_at")
+  expiresAt     DateTime?        @map("expires_at") // Confirmation deadline
+
+  // Relations
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  room        Room        @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@map("allocations")
+}
+
+model Payment {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String        @map("user_id") @db.ObjectId
+  applicationId   String        @map("application_id") @db.ObjectId
+  amount          Float         // Changed from Decimal to Float for MongoDB
+  paymentMethod   String        @default("CARD") @map("payment_method") // CARD, BANK_TRANSFER, etc.
+  reference       String        @unique // Paystack reference
+  status          PaymentStatus @default(PENDING)
+  transactionId   String?       @map("transaction_id") // Paystack transaction ID
+  gatewayResponse String?       @map("gateway_response") // Gateway response message
+  failureReason   String?       @map("failure_reason") // Reason for failure if applicable
+  paystackData    Json?         @map("paystack_data") // Store full Paystack response
+  paidAt          DateTime?     @map("paid_at")
+  createdAt       DateTime      @default(now()) @map("created_at")
+
+  // Relations
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model SystemSettings {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  key   String @unique
+  value Json
+  
+  @@map("system_settings")
+}
+
+model AuditLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @map("user_id")
+  action    String
+  details   Json?
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}
+
+// For machine learning historical data
+model HistoricalData {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  academicSession String   @map("academic_session")
+  semester        String
+  hostelName      String   @map("hostel_name")
+  applicants      Int
+  allocated       Int
+  waitlisted      Int
+  gender          Gender
+  level           Level
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("historical_data")
+}
