@@ -742,12 +742,6 @@
     >
       Financial Report
     </button>
-    <button
-      on:click={exportPayments}
-      class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md font-medium"
-    >
-      Export CSV
-    </button>
   </div>
 </div>
 
